@@ -25,6 +25,11 @@ public object GenerateImageCommand : SimpleCommand(
                 if (tag.name == word) return name
             }
         }
+        for (translation in NovelAiHelperConfig.database.data) {
+            for ((name, tag) in translation.data) {
+                if (tag.name.startsWith(word)) return name
+            }
+        }
         return null
     }
 
