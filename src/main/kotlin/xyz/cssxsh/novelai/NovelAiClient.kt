@@ -4,9 +4,10 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.compression.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.*
@@ -26,9 +27,6 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig) {
             connectTimeoutMillis = config.timeout
             requestTimeoutMillis = null
         }
-        defaultRequest {
-            header(HttpHeaders.Authorization, "Bearer ${config.token}")
-        }
         HttpResponseValidator {
             validateResponse { response ->
                 when (response.status) {
@@ -38,6 +36,25 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig) {
                     HttpStatusCode.NotFound -> throw NovelAiApiException(error = response.body())
                     HttpStatusCode.Conflict -> throw NovelAiApiException(error = response.body())
                     HttpStatusCode.InternalServerError -> throw NovelAiApiException(error = response.body())
+                }
+            }
+        }
+        Auth {
+            bearer {
+                loadTokens {
+                    BearerTokens(config.token, "")
+                }
+                refreshTokens {
+                    BearerTokens(config.token, "")
+                }
+                sendWithoutRequest { builder ->
+                    when (builder.url.encodedPathSegments.lastOrNull()) {
+                        "register" -> false
+                        "login" -> false
+                        "resend-email-verification" -> false
+                        "verify-email" -> false
+                        else -> true
+                    }
                 }
             }
         }

@@ -58,6 +58,7 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
     override fun onInit(owner: PluginDataHolder, storage: PluginDataStorage) {
         if (owner is JvmPlugin) {
             token0 = owner.resolveDataFile("./token.txt")
+            if (!token0.exists()) token0.createNewFile()
             database0 = owner.resolveDataFile("./db.text.json")
             owner.launch {
                 val http = HttpClient(OkHttp) {
