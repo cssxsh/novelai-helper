@@ -71,6 +71,8 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
                         break
                     } catch (_: SocketTimeoutException) {
                         continue
+                    } catch (_: ConnectTimeoutException) {
+                        continue
                     }
                 }
             }

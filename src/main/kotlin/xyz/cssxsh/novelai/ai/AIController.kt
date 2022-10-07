@@ -1,13 +1,16 @@
 package xyz.cssxsh.novelai.ai
 
 import io.ktor.client.call.*
+import io.ktor.client.network.sockets.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.*
 import io.ktor.utils.io.core.*
+import kotlinx.coroutines.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import xyz.cssxsh.novelai.*
+import kotlin.coroutines.*
 
 public class AIController(private val client: NovelAiClient) {
     public suspend fun generate(input: String, model: String, block: JsonObjectBuilder.() -> Unit): AiGenerate {
@@ -64,11 +67,25 @@ public class AIController(private val client: NovelAiClient) {
                 block.invoke(this)
             }
         )
-        val response = client.http.post("https://api.novelai.net/ai/generate-image") {
+        val statement = client.http.preparePost("https://api.novelai.net/ai/generate-image") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
-        val packet = response.body<ByteReadPacket>()
+        val packet = with(statement) {
+            var cause: Exception? = null
+            while (coroutineContext.isActive) {
+                return@with try {
+                    body<ByteReadPacket>()
+                } catch (exception: SocketTimeoutException) {
+                    cause = exception
+                    continue
+                } catch (exception: ConnectTimeoutException) {
+                    cause = exception
+                    continue
+                }
+            }
+            throw CancellationException("generate image timeout", cause)
+        }
         var event = ""
         var id = 0L
         var data = ByteArray(0)
