@@ -38,15 +38,15 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
     public var database: EhTagTranslationDatabase = EhTagTranslationDatabase.Empty
         get() {
             return if (field.data.isEmpty() && database0.exists()) {
-                val json = Json.decodeFromString(EhTagTranslationDatabase.serializer(), database0.readText())
-                field = json
-                json
+                val database = Json.decodeFromString(EhTagTranslationDatabase.serializer(), database0.readText())
+                field = database
+                database
             } else {
                 field
             }
         }
         set(value) {
-            token0.writeText(Json.encodeToString(EhTagTranslationDatabase.serializer(), value))
+            database0.writeText(Json.encodeToString(EhTagTranslationDatabase.serializer(), value))
             field = value
         }
 
