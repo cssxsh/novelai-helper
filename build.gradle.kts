@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "xyz.cssxsh.mirai.novelai"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenLocal()
@@ -15,6 +15,11 @@ repositories {
 
 dependencies {
     implementation("io.ktor:ktor-client-okhttp:2.1.2") {
+        exclude(group = "org.jetbrains.kotlin")
+        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = "org.slf4j")
+    }
+    implementation("io.ktor:ktor-client-auth:2.1.2") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
