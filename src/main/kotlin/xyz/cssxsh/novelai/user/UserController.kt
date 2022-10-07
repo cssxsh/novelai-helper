@@ -22,7 +22,7 @@ public class UserController(private val client: NovelAiClient) {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
-        val login = response.body<SuccessfulLogin>()
+        val login = response.body<SuccessfulLoginResponse>()
         client.config.token = login.accessToken
         return login.accessToken
     }
@@ -61,7 +61,7 @@ public class UserController(private val client: NovelAiClient) {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
-        val login = response.body<SuccessfulLogin>()
+        val login = response.body<SuccessfulLoginResponse>()
         client.config.token = login.accessToken
         return login.accessToken
     }
@@ -72,7 +72,7 @@ public class UserController(private val client: NovelAiClient) {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
-        val login = response.body<SuccessfulLogin>()
+        val login = response.body<SuccessfulLoginResponse>()
         client.config.token = login.accessToken
         return login.accessToken
     }
@@ -97,6 +97,32 @@ public class UserController(private val client: NovelAiClient) {
 
     public suspend fun information(): AccountInformation {
         val response = client.http.get("https://api.novelai.net/user/information")
+        return response.body()
+    }
+
+    public suspend fun data(): UserAccountData {
+        val response = client.http.get("https://api.novelai.net/user/data")
+        return response.body()
+    }
+
+    public suspend fun priority(): Priority {
+        val response = client.http.get("https://api.novelai.net/user/priority")
+        return response.body()
+    }
+
+    public suspend fun giftkeys(): List<Any> {
+        val response = client.http.get("https://api.novelai.net/user/giftkeys")
+        val data = response.body<GiftKeysResponse>()
+        return data.giftKeys
+    }
+
+    public suspend fun subscription(): Subscription {
+        val response = client.http.get("https://api.novelai.net/user/subscription")
+        return response.body()
+    }
+
+    public suspend fun keystore(): Keystore {
+        val response = client.http.get("https://api.novelai.net/user/keystore")
         return response.body()
     }
 }
