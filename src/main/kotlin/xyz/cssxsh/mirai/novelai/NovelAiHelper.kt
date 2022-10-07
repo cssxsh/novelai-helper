@@ -1,7 +1,11 @@
 package xyz.cssxsh.mirai.novelai
 
+import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
+import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
 import net.mamoe.mirai.console.plugin.jvm.*
-import net.mamoe.mirai.utils.info
+import xyz.cssxsh.mirai.novelai.command.*
+import xyz.cssxsh.mirai.novelai.data.*
+import xyz.cssxsh.novelai.*
 
 public object NovelAiHelper : KotlinPlugin(
     JvmPluginDescription(
@@ -12,7 +16,14 @@ public object NovelAiHelper : KotlinPlugin(
         author("cssxsh")
     }
 ) {
+    public val client: NovelAiClient = NovelAiClient(config = NovelAiHelperConfig)
+
     override fun onEnable() {
-        logger.info { "Plugin loaded" }
+        NovelAiHelperConfig.reload()
+        GenerateImageCommand.register()
+    }
+
+    override fun onDisable() {
+        GenerateImageCommand.unregister()
     }
 }
