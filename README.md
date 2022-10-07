@@ -1,6 +1,6 @@
 # NovelAi Helper
 
-> 基于 Mirai Console 的 NovelAi 图片生成场景
+> 基于 [NovelAi](https://novelai.net/image) 的 AI图片生成插件
 
 [![Release](https://img.shields.io/github/v/release/cssxsh/novelai-helper)](https://github.com/cssxsh/novelai-helper/releases)
 ![Downloads](https://img.shields.io/github/downloads/cssxsh/novelai-helper/total)
