@@ -50,7 +50,7 @@ public class UserController(private val client: NovelAiClient) {
         val target = ByteArray(size)
         argon2.generateBytes(password.toByteArray(), target)
 
-        return target.encodeBase64()
+        return target.encodeBase64().replace('+', '-')
     }
 
     public suspend fun login(email: String, password: String): String {
