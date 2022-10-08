@@ -56,25 +56,28 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
 
     @ConsoleExperimentalApi
     override fun onInit(owner: PluginDataHolder, storage: PluginDataStorage) {
-        if (owner is JvmPlugin) {
-            token0 = owner.resolveDataFile("./token.txt")
-            if (!token0.exists()) token0.createNewFile()
-            database0 = owner.resolveDataFile("./db.text.json")
-            owner.launch {
-                val http = HttpClient(OkHttp) {
-                    BrowserUserAgent()
-                    ContentEncoding()
-                }
-                val statement = http.prepareGet("https://github.com/EhTagTranslation/Database/releases/latest/download/db.text.json")
-                while (isActive) {
-                    try {
-                        database0.writeBytes(statement.body())
-                        break
-                    } catch (_: SocketTimeoutException) {
-                        continue
-                    } catch (_: ConnectTimeoutException) {
-                        continue
-                    }
+        if (owner !is JvmPlugin) return
+        token0 = owner.resolveDataFile("./token.txt")
+        if (!token0.exists()) token0.createNewFile()
+        database0 = owner.resolveDataFile("./db.text.json")
+        owner.launch {
+            val http = HttpClient(OkHttp) {
+                BrowserUserAgent()
+                ContentEncoding()
+            }
+            val statement =
+                http.prepareGet("https://github.com/EhTagTranslation/Database/releases/latest/download/db.text.json")
+            while (isActive) {
+                try {
+                    database0.writeBytes(statement.body())
+                    break
+                } catch (_: SocketTimeoutException) {
+                    continue
+                } catch (_: ConnectTimeoutException) {
+                    continue
+                } catch (_: java.net.SocketException) {
+                    owner.logger.warning("翻译词典下载失败，正在尝试重新下载")
+                    continue
                 }
             }
         }
