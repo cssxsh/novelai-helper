@@ -12,10 +12,12 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.dnsoverhttps.DnsOverHttps
 import xyz.cssxsh.novelai.ai.*
 import xyz.cssxsh.novelai.subscription.*
 import xyz.cssxsh.novelai.user.*
+import java.net.*
 
 public open class NovelAiClient(internal val config: NovelAiClientConfig) {
     public open val http: HttpClient = HttpClient(OkHttp) {
@@ -69,6 +71,14 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig) {
                         .includeIPv6(config.ipv6)
                         .build()
                 )
+                config.proxy.toHttpUrlOrNull()?.let {
+                    val proxy = when (it.scheme) {
+                        "socks" -> Proxy(Proxy.Type.SOCKS, InetSocketAddress(it.host, it.port))
+                        "http" -> Proxy(Proxy.Type.HTTP, InetSocketAddress(it.host, it.port))
+                        else -> Proxy.NO_PROXY
+                    }
+                    proxy(proxy)
+                }
             }
         }
     }

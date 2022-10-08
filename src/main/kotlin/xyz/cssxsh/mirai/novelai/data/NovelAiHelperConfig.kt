@@ -23,6 +23,7 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
         contextual(ImageModel.serializer())
     }
 
+    override val proxy: String by value("")
     override val doh: String by value("https://public.dns.iij.jp/dns-query")
     override val ipv6: Boolean by value(true)
     override val timeout: Long by value(30_000L)
