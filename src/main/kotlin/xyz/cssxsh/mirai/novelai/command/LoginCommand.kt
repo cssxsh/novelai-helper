@@ -8,7 +8,7 @@ public object LoginCommand : SimpleCommand(
     owner = NovelAiHelper,
     "nai-login",
     description = "登录账号"
-)  {
+) {
 
     @Handler
     public suspend fun CommandSender.handle(email: String, password: String) {

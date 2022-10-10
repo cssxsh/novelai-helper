@@ -12,12 +12,13 @@ import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import xyz.cssxsh.mirai.novelai.*
 import xyz.cssxsh.mirai.novelai.data.*
+import xyz.cssxsh.novelai.*
 
 public object GenerateImageCommand : SimpleCommand(
     owner = NovelAiHelper,
     "nai",
     description = "生成图片"
-)  {
+) {
 
     private fun translate(word: String): String? {
         for (translation in NovelAiHelperConfig.database.data) {
@@ -69,15 +70,20 @@ public object GenerateImageCommand : SimpleCommand(
         }
 
         NovelAiHelper.logger.info(input.joinToString(" - ", "tags: "))
-        val generate = NovelAiHelper.client.ai.generateImage(input = input.joinToString(",")) {
-            params.forEach { (key, value) ->
-                when {
-                    key == "image" -> put(key, value)
-                    value.toDoubleOrNull() != null -> put(key, value.toDouble())
-                    value.toBooleanStrictOrNull() != null -> put(key, value.toBoolean())
-                    else -> put(key, value)
+        val generate = try {
+            NovelAiHelper.client.ai.generateImage(input = input.joinToString(",")) {
+                params.forEach { (key, value) ->
+                    when {
+                        key == "image" -> put(key, value)
+                        value.toDoubleOrNull() != null -> put(key, value.toDouble())
+                        value.toBooleanStrictOrNull() != null -> put(key, value.toBoolean())
+                        else -> put(key, value)
+                    }
                 }
             }
+        } catch (cause: NovelAiApiException) {
+            sendMessage(cause.error.message)
+            return
         }
         val image = subject.uploadImage(generate.data.toExternalResource().toAutoCloseable())
         sendMessage(fromEvent.message.quote() + image)
