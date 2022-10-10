@@ -3,11 +3,11 @@ package xyz.cssxsh.novelai.user
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.util.*
 import org.bouncycastle.crypto.digests.*
 import org.bouncycastle.crypto.generators.*
 import org.bouncycastle.crypto.params.*
 import xyz.cssxsh.novelai.*
+import java.util.*
 
 public class UserController(private val client: NovelAiClient) {
     public suspend fun register(email: String, text: String, giftkey: String, key: String, recaptcha: String): String {
@@ -50,7 +50,7 @@ public class UserController(private val client: NovelAiClient) {
         val target = ByteArray(size)
         argon2.generateBytes(password.toByteArray(), target)
 
-        return target.encodeBase64().replace('+', '-')
+        return Base64.getUrlEncoder().encodeToString(target)
     }
 
     public suspend fun login(email: String, password: String): String {
