@@ -12,12 +12,19 @@
 * [Permission Command](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/BuiltInCommands.md#permissioncommand)
 * [Chat Command](https://github.com/project-mirai/chat-command)
 
+会自动下载 [EhTagTranslation](https://github.com/EhTagTranslation/Database) 翻译词库
+
 ## 指令
 
 * `/nai <word>` 生成一张图片   
   例如 `/nai 连裤袜 双马尾`
 * `/nai-login <mail> <password>` 登录账号  
   例如 `/nai-login 114514@gmail.com 1919810`
+
+## 配置
+
+* `config.yml` 配置文件 包括 `proxy`, `doh`, `ipv6` 等配置
+* `ban.txt` 屏蔽的词条，可热编辑，保存后一点时间会自动启用
 
 ## TODO
 

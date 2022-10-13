@@ -100,7 +100,7 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
             ban = ban0.readText()
             var last = ban0.lastModified()
             while (isActive) {
-                delay(180_000)
+                delay(60_000)
                 try {
                     val timestamp = ban0.lastModified()
                     if (last < timestamp) {
