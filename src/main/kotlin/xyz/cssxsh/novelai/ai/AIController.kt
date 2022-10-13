@@ -61,7 +61,7 @@ public class AIController(private val client: NovelAiClient) {
                 put("seed", System.currentTimeMillis() / 1000)
                 put("steps", 28)
                 put("strength", 0.7)
-                put("uc", "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry")
+                put("uc", client.config.ban)
                 put("ucPreset", 0)
 
                 block.invoke(this)

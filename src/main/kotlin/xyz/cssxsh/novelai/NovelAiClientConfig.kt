@@ -9,4 +9,5 @@ public interface NovelAiClientConfig {
     public val timeout: Long
     public val image: ImageModel
     public var token: String
+    public val ban: String get() = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry"
 }

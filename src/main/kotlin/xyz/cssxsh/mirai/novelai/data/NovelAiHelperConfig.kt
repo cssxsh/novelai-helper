@@ -30,11 +30,21 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
     override val image: ImageModel by value(ImageModel.SAFE_DIFFUSION)
 
     override var token: String = ""
-        get() = field.ifEmpty { token0.readText() }
+        get() {
+            return if (field.isEmpty()) {
+                val value = token0.readText()
+                field = value
+                value
+            } else {
+                field
+            }
+        }
         set(value) {
             token0.writeText(value)
             field = value
         }
+
+    override var ban: String = ""
 
     public var database: EhTagTranslationDatabase = EhTagTranslationDatabase.Empty
         get() {
@@ -53,6 +63,8 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
 
     private var token0 = File("./token.txt")
 
+    private var ban0 = File("./ban.txt")
+
     private var database0 = File("./db.text.json")
 
     @ConsoleExperimentalApi
@@ -60,6 +72,8 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
         if (owner !is JvmPlugin) return
         token0 = owner.resolveDataFile("./token.txt")
         if (!token0.exists()) token0.createNewFile()
+        ban0 = owner.resolveConfigFile("./ban.txt")
+        if (!ban0.exists()) ban0.writeText(super.ban)
         database0 = owner.resolveDataFile("./db.text.json")
         owner.launch {
             val http = HttpClient(OkHttp) {
@@ -78,6 +92,24 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
                     continue
                 } catch (_: java.net.SocketException) {
                     owner.logger.warning("翻译词典下载失败，正在尝试重新下载")
+                    continue
+                }
+            }
+        }
+        owner.launch {
+            ban = ban0.readText()
+            var last = ban0.lastModified()
+            while (isActive) {
+                delay(180_000)
+                try {
+                    val timestamp = ban0.lastModified()
+                    if (last < timestamp) {
+                        last = timestamp
+                        ban = ban0.readText()
+                        owner.logger.info("BAN 词条已更新")
+                    }
+                } catch (_: Exception) {
+                    owner.logger.warning("BAN 词条检查失败")
                     continue
                 }
             }
