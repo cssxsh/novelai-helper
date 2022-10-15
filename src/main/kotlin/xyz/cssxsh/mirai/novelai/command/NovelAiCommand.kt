@@ -15,7 +15,7 @@ import xyz.cssxsh.mirai.novelai.data.*
 import xyz.cssxsh.novelai.*
 import kotlin.random.*
 
-public object GenerateImageCommand : SimpleCommand(
+public object NovelAiCommand : SimpleCommand(
     owner = NovelAiHelper,
     "nai",
     description = "生成图片"
@@ -63,8 +63,6 @@ public object GenerateImageCommand : SimpleCommand(
                 val url = source.queryUrl()
                 val response = NovelAiHelper.client.http.get(url)
                 val packet = response.body<ByteReadPacket>()
-//                params["width"] = source.width.toString()
-//                params["height"] = source.height.toString()
                 params["image"] = packet.encodeBase64()
             } catch (cause: Exception) {
                 NovelAiHelper.logger.warning("download image fail", cause)
@@ -91,6 +89,6 @@ public object GenerateImageCommand : SimpleCommand(
             return
         }
         val image = subject.uploadImage(generate.data.toExternalResource().toAutoCloseable())
-        sendMessage(fromEvent.message.quote() + image)
+        sendMessage(fromEvent.message.quote() + image + "\n$seed")
     }
 }

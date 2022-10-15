@@ -20,12 +20,12 @@ public object NovelAiHelper : KotlinPlugin(
 
     override fun onEnable() {
         NovelAiHelperConfig.reload()
-        GenerateImageCommand.register()
-        LoginCommand.register()
+        NovelAiCommand.register()
+        NovelAiLoginCommand.register()
     }
 
     override fun onDisable() {
-        GenerateImageCommand.unregister()
-        LoginCommand.unregister()
+        NovelAiCommand.unregister()
+        NovelAiLoginCommand.unregister()
     }
 }

@@ -4,7 +4,7 @@ import net.mamoe.mirai.console.command.*
 import xyz.cssxsh.mirai.novelai.*
 import xyz.cssxsh.novelai.*
 
-public object LoginCommand : SimpleCommand(
+public object NovelAiLoginCommand : SimpleCommand(
     owner = NovelAiHelper,
     "nai-login",
     description = "登录账号"
