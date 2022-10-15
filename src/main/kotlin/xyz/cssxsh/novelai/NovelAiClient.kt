@@ -39,6 +39,8 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig, intern
                     HttpStatusCode.Conflict -> throw NovelAiApiException(error = response.body())
                     HttpStatusCode.InternalServerError -> throw NovelAiApiException(error = response.body())
                 }
+                if (response.status.value in 500..599) throw ServerResponseException(response, response.body())
+                if ((response.contentLength() ?: 0) == 0L) throw ServerResponseException(response, response.body())
             }
         }
         Auth {
@@ -63,7 +65,7 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig, intern
         BrowserUserAgent()
         ContentEncoding()
         defaultRequest {
-            if (!default) url(config.baseUrl)
+            if (default) url("https://api.novelai.net") else url(config.baseUrl)
         }
         engine {
             config {

@@ -57,7 +57,7 @@ public object NovelAiFuCommand : SimpleCommand(
             }
         }
 
-        val seed = random.nextLong(0, 2 shl 32 - 1)
+        val seed = random.nextLong(0, 2L shl 32 - 1)
         NovelAiHelper.logger.info(input.joinToString(", ", "generate image seed: $seed, tags: "))
         val generate = try {
             client.ai.generateImage(input = input.joinToString(",")) {
@@ -76,6 +76,6 @@ public object NovelAiFuCommand : SimpleCommand(
             return
         }
         val image = subject.uploadImage(generate.data.toExternalResource().toAutoCloseable())
-        sendMessage(fromEvent.message.quote() + image + "\n$seed")
+        sendMessage(fromEvent.message.quote() + image + "\nseed=$seed")
     }
 }

@@ -99,7 +99,7 @@ public class AIController(private val client: NovelAiClient) {
                 "data" -> data = packet.decodeBase64Bytes().readBytes()
             }
         }
-        if (event.isEmpty()) {
+        if (data.isEmpty()) {
             throw NovelAiApiException(error = Json.decodeFromString(key))
         }
 
