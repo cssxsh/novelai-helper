@@ -19,7 +19,7 @@ import xyz.cssxsh.novelai.subscription.*
 import xyz.cssxsh.novelai.user.*
 import java.net.*
 
-public open class NovelAiClient(internal val config: NovelAiClientConfig) {
+public open class NovelAiClient(internal val config: NovelAiClientConfig, internal val default: Boolean = false) {
     public open val http: HttpClient = HttpClient(OkHttp) {
         install(ContentNegotiation) {
             json(json = Json)
@@ -62,6 +62,9 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig) {
         }
         BrowserUserAgent()
         ContentEncoding()
+        defaultRequest {
+            if (!default) url(config.baseUrl)
+        }
         engine {
             config {
                 dns(

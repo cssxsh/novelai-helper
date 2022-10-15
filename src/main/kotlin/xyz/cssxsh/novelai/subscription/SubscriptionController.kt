@@ -8,7 +8,7 @@ import xyz.cssxsh.novelai.*
 public class SubscriptionController(private val client: NovelAiClient) {
     public suspend fun bind(id: String, processor: PaymentProcessor) {
         val body = BindSubscriptionRequest(paymentProcessor = processor, subscriptionId = id)
-        val response = client.http.post("https://api.novelai.net/user/subscription/bind") {
+        val response = client.http.post("/user/subscription/bind") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -17,7 +17,7 @@ public class SubscriptionController(private val client: NovelAiClient) {
 
     public suspend fun change(plan: SubscriptionPlan) {
         val body = ChangeSubscriptionPlanRequest(newSubscriptionPlan = plan)
-        val response = client.http.post("https://api.novelai.net/user/subscription/change") {
+        val response = client.http.post("/user/subscription/change") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }

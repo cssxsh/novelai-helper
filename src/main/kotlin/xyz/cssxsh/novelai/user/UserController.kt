@@ -18,7 +18,7 @@ public class UserController(private val client: NovelAiClient) {
             key = key,
             recaptcha = recaptcha
         )
-        val response = client.http.post("https://api.novelai.net/user/register") {
+        val response = client.http.post("/user/register") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -57,7 +57,7 @@ public class UserController(private val client: NovelAiClient) {
         val salt = blake2b(16, password.substring(0, 6) + email + "novelai_data_access_key")
         val key = argon2(password, salt, 64).substring(0, 64)
         val body = LoginRequest(key = key)
-        val response = client.http.post("https://api.novelai.net/user/login") {
+        val response = client.http.post("/user/login") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -68,7 +68,7 @@ public class UserController(private val client: NovelAiClient) {
 
     public suspend fun changeAccessKey(current: String, new: String, email: String): String {
         val body = ChangeAccessKeyRequest(currentAccessKey = current, newAccessKey = new, newEmail = email)
-        val response = client.http.post("https://api.novelai.net/user/change-access-key") {
+        val response = client.http.post("/user/change-access-key") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -79,7 +79,7 @@ public class UserController(private val client: NovelAiClient) {
 
     public suspend fun sendEmailVerification(email: String) {
         val body = EmailVerificationStartRequest(email = email)
-        val response = client.http.post("https://api.novelai.net/user/resend-email-verification") {
+        val response = client.http.post("/user/resend-email-verification") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -88,7 +88,7 @@ public class UserController(private val client: NovelAiClient) {
 
     public suspend fun verifyEmail(token: String) {
         val body = EmailVerificationRequest(verificationToken = token)
-        val response = client.http.post("https://api.novelai.net/user/verify-email") {
+        val response = client.http.post("/user/verify-email") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -96,33 +96,33 @@ public class UserController(private val client: NovelAiClient) {
     }
 
     public suspend fun information(): AccountInformation {
-        val response = client.http.get("https://api.novelai.net/user/information")
+        val response = client.http.get("/user/information")
         return response.body()
     }
 
     public suspend fun data(): UserAccountData {
-        val response = client.http.get("https://api.novelai.net/user/data")
+        val response = client.http.get("/user/data")
         return response.body()
     }
 
     public suspend fun priority(): Priority {
-        val response = client.http.get("https://api.novelai.net/user/priority")
+        val response = client.http.get("/user/priority")
         return response.body()
     }
 
     public suspend fun giftkeys(): List<Any> {
-        val response = client.http.get("https://api.novelai.net/user/giftkeys")
+        val response = client.http.get("/user/giftkeys")
         val data = response.body<GiftKeysResponse>()
         return data.giftKeys
     }
 
     public suspend fun subscription(): Subscription {
-        val response = client.http.get("https://api.novelai.net/user/subscription")
+        val response = client.http.get("/user/subscription")
         return response.body()
     }
 
     public suspend fun keystore(): Keystore {
-        val response = client.http.get("https://api.novelai.net/user/keystore")
+        val response = client.http.get("/user/keystore")
         return response.body()
     }
 }

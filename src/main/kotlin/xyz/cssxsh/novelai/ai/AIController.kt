@@ -19,7 +19,7 @@ public class AIController(private val client: NovelAiClient) {
             model = model,
             parameters = buildJsonObject(block)
         )
-        val response = client.http.post("https://api.novelai.net/ai/generate") {
+        val response = client.http.post("/ai/generate") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -32,7 +32,7 @@ public class AIController(private val client: NovelAiClient) {
             model = model,
             parameters = buildJsonObject(block)
         )
-        val response = client.http.post("https://api.novelai.net/ai/generate-stream") {
+        val response = client.http.post("/ai/generate-stream") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -67,7 +67,7 @@ public class AIController(private val client: NovelAiClient) {
                 block.invoke(this)
             }
         )
-        val statement = client.http.preparePost("https://api.novelai.net/ai/generate-image") {
+        val statement = client.http.preparePost("/ai/generate-image") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
@@ -89,8 +89,9 @@ public class AIController(private val client: NovelAiClient) {
         var event = ""
         var id = 0L
         var data = ByteArray(0)
+        var key = ""
         while (packet.canRead()) {
-            val key = packet.readUTF8UntilDelimiter(":")
+            key = packet.readUTF8UntilDelimiter(":")
             packet.readByte()
             when (key.trim()) {
                 "event" -> event = packet.readUTF8UntilDelimiter("\n").trim()
@@ -98,19 +99,22 @@ public class AIController(private val client: NovelAiClient) {
                 "data" -> data = packet.decodeBase64Bytes().readBytes()
             }
         }
+        if (event.isEmpty()) {
+            throw NovelAiApiException(error = Json.decodeFromString(key))
+        }
 
         return AiGenerateImage(event, id, data)
     }
 
     public suspend fun classify(): AiSequenceClassification {
-        val response = client.http.post("https://api.novelai.net/ai/classify") {
+        val response = client.http.post("/ai/classify") {
             contentType(ContentType.Application.Json)
         }
         return response.body()
     }
 
     public suspend fun generateImageTags(model: String, prompt: String): AiRequestImageGenerationTags {
-        val response = client.http.get("https://api.novelai.net/ai/generate-image/suggest-tags") {
+        val response = client.http.get("/ai/generate-image/suggest-tags") {
             parameter("model", model)
             parameter("prompt", prompt)
         }
@@ -118,7 +122,7 @@ public class AIController(private val client: NovelAiClient) {
     }
 
     public suspend fun generateVoice(text: String, seed: String): AiSequenceClassification {
-        val response = client.http.get("https://api.novelai.net/ai/generate-voice") {
+        val response = client.http.get("/ai/generate-voice") {
             parameter("text", text)
             parameter("seed", seed)
             parameter("voice", "")

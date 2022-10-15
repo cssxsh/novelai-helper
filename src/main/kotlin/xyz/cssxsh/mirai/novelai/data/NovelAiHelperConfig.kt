@@ -29,6 +29,9 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
     override val timeout: Long by value(30_000L)
     override val image: ImageModel by value(ImageModel.SAFE_DIFFUSION)
 
+    @ValueName("naifu_api")
+    override val baseUrl: String by value("http://127.0.0.1:6969/")
+
     override var token: String = ""
         get() {
             return field.ifEmpty {

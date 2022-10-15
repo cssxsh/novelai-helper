@@ -11,14 +11,16 @@ import net.mamoe.mirai.message.data.Image.Key.queryUrl
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import xyz.cssxsh.mirai.novelai.*
+import xyz.cssxsh.mirai.novelai.data.*
 import xyz.cssxsh.novelai.*
 import kotlin.random.*
 
-public object NovelAiCommand : SimpleCommand(
+public object NovelAiFuCommand : SimpleCommand(
     owner = NovelAiHelper,
-    "nai",
+    "nai-fu", "naifu",
     description = "生成图片"
 ) {
+    public val client: NovelAiClient = NovelAiClient(config = NovelAiHelperConfig, default = false)
 
     private val random = Random(seed = System.currentTimeMillis())
 
@@ -46,7 +48,7 @@ public object NovelAiCommand : SimpleCommand(
         fromEvent.message.findIsInstance<Image>()?.let { source ->
             try {
                 val url = source.queryUrl()
-                val response = NovelAiHelper.client.http.get(url)
+                val response = client.http.get(url)
                 val packet = response.body<ByteReadPacket>()
                 params["image"] = packet.encodeBase64()
             } catch (cause: Exception) {
@@ -58,7 +60,7 @@ public object NovelAiCommand : SimpleCommand(
         val seed = random.nextLong(0, 2 shl 32 - 1)
         NovelAiHelper.logger.info(input.joinToString(", ", "generate image seed: $seed, tags: "))
         val generate = try {
-            NovelAiHelper.client.ai.generateImage(input = input.joinToString(",")) {
+            client.ai.generateImage(input = input.joinToString(",")) {
                 put("seed", seed)
                 params.forEach { (key, value) ->
                     when {
@@ -73,7 +75,7 @@ public object NovelAiCommand : SimpleCommand(
             sendMessage(cause.error.message)
             return
         }
-        val image = generate.data.toExternalResource().use { subject.uploadImage(it) }
+        val image = subject.uploadImage(generate.data.toExternalResource().toAutoCloseable())
         sendMessage(fromEvent.message.quote() + image + "\n$seed")
     }
 }
