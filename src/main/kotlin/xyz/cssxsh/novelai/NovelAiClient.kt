@@ -11,6 +11,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.*
+import okhttp3.Dns
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.dnsoverhttps.DnsOverHttps
@@ -66,13 +67,22 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig) {
         ContentEncoding()
         engine {
             config {
-                dns(
-                    DnsOverHttps.Builder()
+                dns(object : Dns {
+                    private val doh = DnsOverHttps.Builder()
                         .client(okhttp3.OkHttpClient())
                         .url(config.doh.toHttpUrl())
                         .includeIPv6(config.ipv6)
                         .build()
-                )
+
+                    @Throws(UnknownHostException::class)
+                    override fun lookup(hostname: String): List<InetAddress> {
+                        return try {
+                            doh.lookup(hostname)
+                        } catch (_: UnknownHostException) {
+                            Dns.SYSTEM.lookup(hostname)
+                        }
+                    }
+                })
                 config.proxy.toHttpUrlOrNull()?.let {
                     val proxy = when (it.scheme) {
                         "socks" -> Proxy(Proxy.Type.SOCKS, InetSocketAddress(it.host, it.port))
