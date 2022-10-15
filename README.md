@@ -28,7 +28,6 @@
   `steps` 迭代次数  
   `width` 宽度  
   `height` 高度  
-  `samples` 出图数量  
   `scale` 比例  
   `sampler` 采样器 可选值 `k_euler_ancestral`, `k_euler`, `k_lms`, `plms`, `ddim`  
   `strength` 以图出图中对原图的更改程度 可选值 [0.00, 0.99]  
