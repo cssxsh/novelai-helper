@@ -11,12 +11,12 @@ public object NovelAiHelper : KotlinPlugin(
     JvmPluginDescription(
         id = "xyz.cssxsh.mirai.plugin.novelai-helper",
         name = "novelai-helper",
-        version = "1.0.8",
+        version = "1.0.9",
     ) {
         author("cssxsh")
     }
 ) {
-    public val client: NovelAiClient = NovelAiClient(config = NovelAiHelperConfig, default = true)
+    public val client: NovelAiClient = NovelAiClient(config = NovelAiHelperConfig)
 
     public fun translate(word: String): String? {
         for (translation in NovelAiHelperConfig.database.data) {
@@ -36,6 +36,7 @@ public object NovelAiHelper : KotlinPlugin(
         NovelAiHelperConfig.reload()
         NovelAiHelperConfig.save()
         NovelAiCommand.register()
+        NovelAiFuCommand.register()
         NovelAiLoginCommand.register()
     }
 

@@ -19,7 +19,7 @@ import xyz.cssxsh.novelai.subscription.*
 import xyz.cssxsh.novelai.user.*
 import java.net.*
 
-public open class NovelAiClient(internal val config: NovelAiClientConfig, internal val default: Boolean = false) {
+public open class NovelAiClient(internal val config: NovelAiClientConfig) {
     public open val http: HttpClient = HttpClient(OkHttp) {
         install(ContentNegotiation) {
             json(json = Json)
@@ -39,8 +39,8 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig, intern
                     HttpStatusCode.Conflict -> throw NovelAiApiException(error = response.body())
                     HttpStatusCode.InternalServerError -> throw NovelAiApiException(error = response.body())
                 }
+                if (response.status.value in 400..499) throw ClientRequestException(response, response.body())
                 if (response.status.value in 500..599) throw ServerResponseException(response, response.body())
-                if ((response.contentLength() ?: 0) == 0L) throw ServerResponseException(response, response.body())
             }
         }
         Auth {
@@ -64,9 +64,6 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig, intern
         }
         BrowserUserAgent()
         ContentEncoding()
-        defaultRequest {
-            if (default) url("https://api.novelai.net") else url(config.baseUrl)
-        }
         engine {
             config {
                 dns(

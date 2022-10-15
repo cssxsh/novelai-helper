@@ -30,7 +30,7 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
     override val image: ImageModel by value(ImageModel.SAFE_DIFFUSION)
 
     @ValueName("naifu_api")
-    override val baseUrl: String by value("http://127.0.0.1:6969/")
+    public val local: String by value("http://127.0.0.1:6969/")
 
     override var token: String = ""
         get() {
