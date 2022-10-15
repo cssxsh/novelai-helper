@@ -12,7 +12,8 @@
 * [Permission Command](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/BuiltInCommands.md#permissioncommand)
 * [Chat Command](https://github.com/project-mirai/chat-command)
 
-会自动下载 [EhTagTranslation](https://github.com/EhTagTranslation/Database) 翻译词库
+会自动下载 [EhTagTranslation](https://github.com/EhTagTranslation/Database) 翻译词库  
+可以对接 [NaiFu](#NaiFu) 本地搭建
 
 ## 指令
 
