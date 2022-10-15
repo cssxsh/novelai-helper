@@ -13,6 +13,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import xyz.cssxsh.mirai.novelai.*
 import xyz.cssxsh.mirai.novelai.data.*
 import xyz.cssxsh.novelai.*
+import kotlin.random.*
 
 public object GenerateImageCommand : SimpleCommand(
     owner = NovelAiHelper,
@@ -33,6 +34,8 @@ public object GenerateImageCommand : SimpleCommand(
         }
         return null
     }
+
+    private val random = Random(seed = System.currentTimeMillis())
 
     @Handler
     public suspend fun CommandSenderOnMessage<*>.handle(vararg tags: String) {
@@ -69,9 +72,11 @@ public object GenerateImageCommand : SimpleCommand(
             }
         }
 
-        NovelAiHelper.logger.info(input.joinToString(" - ", "tags: "))
+        val seed = random.nextLong(0, 2 shl 32 - 1)
+        NovelAiHelper.logger.info(input.joinToString(", ", "generate image seed: $seed, tags: "))
         val generate = try {
             NovelAiHelper.client.ai.generateImage(input = input.joinToString(",")) {
+                put("seed", seed)
                 params.forEach { (key, value) ->
                     when {
                         key == "image" -> put(key, value)
