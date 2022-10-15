@@ -11,7 +11,7 @@ public object NovelAiHelper : KotlinPlugin(
     JvmPluginDescription(
         id = "xyz.cssxsh.mirai.plugin.novelai-helper",
         name = "novelai-helper",
-        version = "1.0.5",
+        version = "1.0.6",
     ) {
         author("cssxsh")
     }

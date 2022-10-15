@@ -17,7 +17,9 @@
 ## 指令
 
 * `/nai <word>` 生成一张图片   
-  例如 `/nai 连裤袜 双马尾`
+  例如 `/nai 连裤袜 双马尾` (只有部分词条会自动翻译)  
+  例如 `/nai swimsuit #seed=12346` (设置种子)  
+  例如 `/nai "swimsuit, ahegao"` (如果需要以 `,` 分割词条, 请用 `"` 包裹)
 * `/nai-login <mail> <password>` 登录账号  
   例如 `/nai-login 114514@gmail.com 1919810`
 

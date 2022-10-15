@@ -31,12 +31,10 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
 
     override var token: String = ""
         get() {
-            return if (field.isEmpty()) {
+            return field.ifEmpty {
                 val value = token0.readText()
                 field = value
                 value
-            } else {
-                field
             }
         }
         set(value) {
