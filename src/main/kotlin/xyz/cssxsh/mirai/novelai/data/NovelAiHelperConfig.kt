@@ -26,11 +26,14 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
     override val proxy: String by value("")
     override val doh: String by value("https://public.dns.iij.jp/dns-query")
     override val ipv6: Boolean by value(true)
-    override val timeout: Long by value(30_000L)
+    override val timeout: Long by value(60_000L)
     override val image: ImageModel by value(ImageModel.SAFE_DIFFUSION)
 
     @ValueName("naifu_api")
     public val local: String by value("http://127.0.0.1:6969/")
+
+    @ValueName("image2image")
+    public val image2image: Boolean by value(true)
 
     override var token: String = ""
         get() {

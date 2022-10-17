@@ -11,6 +11,7 @@ import net.mamoe.mirai.message.data.Image.Key.queryUrl
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import xyz.cssxsh.mirai.novelai.*
+import xyz.cssxsh.mirai.novelai.data.*
 import xyz.cssxsh.novelai.*
 import kotlin.random.*
 
@@ -44,6 +45,7 @@ public object NovelAiCommand : SimpleCommand(
             }
         }
         fromEvent.message.findIsInstance<Image>()?.let { source ->
+            if (NovelAiHelperConfig.image2image.not()) return
             try {
                 val url = source.queryUrl()
                 val response = NovelAiHelper.client.http.get(url)

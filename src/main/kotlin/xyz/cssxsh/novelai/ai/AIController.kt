@@ -10,7 +10,6 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import xyz.cssxsh.novelai.*
-import kotlin.coroutines.*
 
 public class AIController(private val client: NovelAiClient) {
     public suspend fun generate(input: String, model: String, block: JsonObjectBuilder.() -> Unit): AiGenerate {
@@ -71,9 +70,10 @@ public class AIController(private val client: NovelAiClient) {
             setBody(body)
             contentType(ContentType.Application.Json)
         }
+        var count = 3
         val packet = with(statement) {
             var cause: Exception? = null
-            while (coroutineContext.isActive) {
+            while (count-- > 0) {
                 return@with try {
                     body<ByteReadPacket>()
                 } catch (exception: SocketTimeoutException) {

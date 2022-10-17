@@ -51,9 +51,10 @@ public object NovelAiFuCommand : SimpleCommand(
             setBody(body)
             contentType(ContentType.Application.Json)
         }
+        var count = 3
         val packet = with(statement) {
             var cause: Exception? = null
-            while (kotlin.coroutines.coroutineContext.isActive) {
+            while (count-- > 0) {
                 return@with try {
                     body<ByteReadPacket>()
                 } catch (exception: SocketTimeoutException) {
