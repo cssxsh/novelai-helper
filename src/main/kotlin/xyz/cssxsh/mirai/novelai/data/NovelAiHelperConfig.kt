@@ -86,7 +86,8 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
             }
             val statement =
                 http.prepareGet("https://github.com/EhTagTranslation/Database/releases/latest/download/db.text.json")
-            while (isActive) {
+            var count = 3
+            while (count-- > 0) {
                 try {
                     database0.writeBytes(statement.body())
                     break
@@ -97,6 +98,9 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
                 } catch (_: java.net.SocketException) {
                     owner.logger.warning("翻译词典下载失败，正在尝试重新下载")
                     continue
+                }  catch (cause: Exception) {
+                    owner.logger.error("翻译词典下载失败", cause)
+                    break
                 }
             }
         }
