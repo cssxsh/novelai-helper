@@ -116,14 +116,15 @@ public object NovelAiFuCommand : SimpleCommand(
             }
         }
 
-        val seed = random.nextLong(0, 2L shl 32 - 1)
+        val seed = params["seed"]?.toLongOrNull() ?: random.nextLong(0, 2L shl 32 - 1)
         NovelAiHelper.logger.info(input.joinToString(", ", "generate image seed: $seed, tags: "))
         val generate = try {
             colab(prompt = input.joinToString(",")) {
                 put("seed", seed)
-                params.forEach { (key, value) ->
+                for ((key, value) in params) {
                     when {
                         key == "image" -> put(key, value)
+                        key == "seed" -> continue
                         value.toDoubleOrNull() != null -> put(key, value.toDouble())
                         value.toBooleanStrictOrNull() != null -> put(key, value.toBoolean())
                         else -> put(key, value)
