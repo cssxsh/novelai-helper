@@ -2,11 +2,11 @@ plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.serialization") version "1.7.20"
 
-    id("net.mamoe.mirai-console") version "2.13.0-RC"
+    id("net.mamoe.mirai-console") version "2.13.0-RC2"
 }
 
 group = "xyz.cssxsh.mirai.novelai"
-version = "1.0.10"
+version = "1.1.0"
 
 repositories {
     mavenLocal()
@@ -48,7 +48,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation("org.slf4j:slf4j-simple:2.0.3")
-    testImplementation("net.mamoe:mirai-logging-slf4j:2.13.0-RC")
+    testImplementation("net.mamoe:mirai-logging-slf4j:2.13.0-RC2")
 }
 
 kotlin {
