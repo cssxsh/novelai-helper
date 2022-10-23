@@ -38,6 +38,7 @@
   例如 `/nai-login 114514@gmail.com 1919810`
 * `/naifu <word>` 生成一张图片
   对接 `naifu`, `naifu` 是基于 novelai 官方 web 端的修改版，所以指令用法 和 `nai` 一致
+* `/nai-reload` 重新载入 `config.yml` 配置文件
 
 ## 配置
 
