@@ -48,7 +48,7 @@ public class AIController(private val client: NovelAiClient) {
         block: JsonObjectBuilder.() -> Unit = {}
     ): AiGenerateImage {
         val body = AiGenerateRequest(
-            input = input,
+            input = input.ifEmpty { "," },
             model = Json.encodeToString(model).removeSurrounding("\""),
             parameters = buildJsonObject {
                 put("height", 768)

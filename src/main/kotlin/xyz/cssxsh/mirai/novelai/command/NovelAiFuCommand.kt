@@ -29,7 +29,7 @@ public object NovelAiFuCommand : SimpleCommand(
 
     private suspend fun colab(prompt: String, block: JsonObjectBuilder.() -> Unit = {}): AiGenerateImage {
         val body = buildJsonObject {
-            put("prompt", prompt)
+            put("prompt", prompt.ifEmpty { "," })
             put("height", 768)
             put("width", 512)
             put("scale", 12)
