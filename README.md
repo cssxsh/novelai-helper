@@ -4,7 +4,7 @@
 
 [![Release](https://img.shields.io/github/v/release/cssxsh/novelai-helper)](https://github.com/cssxsh/novelai-helper/releases)
 ![Downloads](https://img.shields.io/github/downloads/cssxsh/novelai-helper/total)
-[![maven-central](https://img.shields.io/maven-central/v/xyz.cssxsh.mirai/novelai-helper)](https://search.maven.org/artifact/xyz.cssxsh.mirai/novelai-helper)
+[![MiraiForum](https://img.shields.io/badge/post-on%20MiraiForum-yellow)](https://mirai.mamoe.net/topic/1657)
 
 **使用前应该查阅的相关文档或项目**
 
