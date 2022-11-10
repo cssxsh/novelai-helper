@@ -11,7 +11,7 @@ public object NovelAiHelper : KotlinPlugin(
     JvmPluginDescription(
         id = "xyz.cssxsh.mirai.plugin.novelai-helper",
         name = "novelai-helper",
-        version = "1.1.0",
+        version = "1.1.1",
     ) {
         author("cssxsh")
     }
@@ -38,10 +38,13 @@ public object NovelAiHelper : KotlinPlugin(
         NovelAiCommand.register()
         NovelAiFuCommand.register()
         NovelAiLoginCommand.register()
+        NovelAiReLoadCommand.register()
     }
 
     override fun onDisable() {
         NovelAiCommand.unregister()
+        NovelAiFuCommand.unregister()
         NovelAiLoginCommand.unregister()
+        NovelAiReLoadCommand.unregister()
     }
 }

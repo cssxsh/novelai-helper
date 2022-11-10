@@ -2,11 +2,11 @@ plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.serialization") version "1.7.20"
 
-    id("net.mamoe.mirai-console") version "2.13.0-RC2"
+    id("net.mamoe.mirai-console") version "2.13.0"
 }
 
 group = "xyz.cssxsh.mirai.novelai"
-version = "1.1.0"
+version = "1.1.1"
 
 repositories {
     mavenLocal()
@@ -14,27 +14,27 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-okhttp:2.1.2") {
+    implementation("io.ktor:ktor-client-okhttp:2.1.3") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
     }
-    implementation("io.ktor:ktor-client-auth:2.1.2") {
+    implementation("io.ktor:ktor-client-auth:2.1.3") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
     }
-    implementation("io.ktor:ktor-client-encoding:2.1.2") {
+    implementation("io.ktor:ktor-client-encoding:2.1.3") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
     }
-    implementation("io.ktor:ktor-client-content-negotiation:2.1.2") {
+    implementation("io.ktor:ktor-client-content-negotiation:2.1.3") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
     }
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.1.2") {
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.1.3") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
@@ -48,7 +48,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation("org.slf4j:slf4j-simple:2.0.3")
-    testImplementation("net.mamoe:mirai-logging-slf4j:2.13.0-RC2")
+    testImplementation("net.mamoe:mirai-logging-slf4j:2.13.0")
 }
 
 kotlin {
