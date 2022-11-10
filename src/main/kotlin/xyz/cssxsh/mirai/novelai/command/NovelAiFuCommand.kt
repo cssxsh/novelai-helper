@@ -7,6 +7,7 @@ import io.ktor.http.*
 import io.ktor.util.*
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
 import kotlinx.serialization.json.*
 import net.mamoe.mirai.console.command.*
 import net.mamoe.mirai.message.data.*
@@ -83,9 +84,20 @@ public object NovelAiFuCommand : SimpleCommand(
         return AiGenerateImage(event, id, data)
     }
 
+    private val records: MutableMap<Long, Long> = java.util.concurrent.ConcurrentHashMap()
+
+    private val mutex: Mutex = Mutex()
+
     @Handler
     public suspend fun CommandSenderOnMessage<*>.handle(vararg tags: String) {
         this as UserCommandSender
+        subject.id
+        mutex.withLock {
+            val latest = records[subject.id] ?: 0
+            val millis = latest + NovelAiHelperConfig.interval - System.currentTimeMillis()
+            delay(millis)
+            records[subject.id] = System.currentTimeMillis()
+        }
         val input: MutableSet<String> = HashSet()
         val params: MutableMap<String, String> = HashMap()
         for (tag in tags) {

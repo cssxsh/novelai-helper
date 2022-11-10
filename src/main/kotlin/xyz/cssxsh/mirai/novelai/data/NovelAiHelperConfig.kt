@@ -35,6 +35,9 @@ public object NovelAiHelperConfig : ReadOnlyPluginConfig("config"), NovelAiClien
     @ValueName("image2image")
     public val image2image: Boolean by value(true)
 
+    @ValueName("command_interval")
+    public val interval: Long by value(10_000L)
+
     override var token: String = ""
         get() {
             return field.ifEmpty {
