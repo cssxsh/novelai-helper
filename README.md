@@ -15,7 +15,9 @@
 会自动下载 [EhTagTranslation](https://github.com/EhTagTranslation/Database) 翻译词库  
 可以对接 [NaiFu](#NaiFu) 本地搭建  
 或者你可以 利用 [colab](https://colab.research.google.com/drive/1_Ma71L6uGbtt6UQyA3FjqW2lcZ5Bjck-#scrollTo=KZ88G-iWCTs7) 进行在线搭建  
-将搭建得到的 url 例如 `https://express-disco-environmental-friends.trycloudflare.com/` 填入 `config.yml` 的 `naifu_api` 配置项
+将搭建得到的 url 例如 `https://express-disco-environmental-friends.trycloudflare.com/` 填入 `config.yml` 的 `naifu_api` 配置项  
+
+**如果你是用 Stable Diffusion web UI 搭建的API** 请移步 https://github.com/cssxsh/stable-diffusion-helper
 
 ## 指令
 
