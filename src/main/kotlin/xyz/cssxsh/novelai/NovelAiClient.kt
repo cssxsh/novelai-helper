@@ -83,14 +83,14 @@ public open class NovelAiClient(internal val config: NovelAiClientConfig) {
                         }
                     }
                 })
-                config.proxy.toHttpUrlOrNull()?.let {
-                    val proxy = when (it.scheme) {
-                        "socks" -> Proxy(Proxy.Type.SOCKS, InetSocketAddress(it.host, it.port))
-                        "http" -> Proxy(Proxy.Type.HTTP, InetSocketAddress(it.host, it.port))
-                        else -> Proxy.NO_PROXY
+                proxy(config.proxy.ifEmpty { null }?.let { urlString ->
+                    val url = Url(urlString)
+                    when (url.protocol) {
+                        URLProtocol.HTTP -> Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port))
+                        URLProtocol.SOCKS -> Proxy(Proxy.Type.SOCKS, InetSocketAddress(url.host, url.port))
+                        else -> throw IllegalArgumentException("Illegal Proxy: $urlString")
                     }
-                    proxy(proxy)
-                }
+                })
             }
         }
     }
